@@ -40,7 +40,7 @@ const buttonVariants = cva(
 )
 
 function Button({
-  className,
+  className='',
   variant = "default",
   size = "default",
   ...props
@@ -48,7 +48,7 @@ function Button({
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, className }), 'bg-accent text-accent-foreground hover:bg-accent-strong')}
       {...props}
     />
   )

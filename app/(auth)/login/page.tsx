@@ -1,5 +1,5 @@
 import AuthPageShell from "@/components/form/AuthPageShell";
 
 export default function LoginPage() {
-  return <AuthPageShell mode="signup" />;
+  return <AuthPageShell mode="signin" />;
 }
