@@ -15,8 +15,8 @@ const geistMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ChatFlow",
-  description: "A modern chat application",
+  title: "FlowDesk | Make room for great work",
+  description: "Projects, plans, and people in one clear workspace.",
 };
 
 export default function RootLayout({

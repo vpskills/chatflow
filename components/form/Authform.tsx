@@ -1,9 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
-import { Eye, EyeOff, MessageCircle } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail, UserRound } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 interface AuthType {
@@ -12,8 +12,8 @@ interface AuthType {
   password: string;
 }
 
-const Authform = () => {
-  const [isSignup, setIsSignup] = useState(false);
+const Authform = ({ initialMode = "signin" }: { initialMode?: "signin" | "signup" }) => {
+  const isSignup = initialMode === "signup";
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -21,140 +21,114 @@ const Authform = () => {
     formState: { errors },
   } = useForm<AuthType>();
 
-  const onSubmit: SubmitHandler<AuthType> = (data) => {
-    
-  }
+  const onSubmit: SubmitHandler<AuthType> = () => {};
 
   return (
-    <div className="mx-auto w-full max-w-sm">
-      {/* Mobile Logo for mobile screens */}
-      <div className="mb-8 flex items-center gap-2 md:hidden">
-        <div className="flex size-9 items-center justify-center rounded-lg bg-accent text-accent-foreground">
-          <MessageCircle size={20} />
-        </div>
-
-        <span className="font-semibold">ChatFlow</span>
-      </div>
-
-      {/* Heading */}
+    <div className="w-full">
       <div className="mb-8">
-        <h2 className="text-2xl font-b)old tracking-tight">
+        <p className="mb-3 text-xs font-semibold uppercase text-[#66805f]">
+          {isSignup ? "START BUILDING TOGETHER" : "YOUR WORKSPACE IS READY"}
+        </p>
+        <h2 className="text-3xl font-semibold tracking-tight text-[#23382d]">
           {isSignup ? "Create your account" : "Welcome back"}
         </h2>
 
-        <p className="mt-1.5 text-sm text-muted-foreground">
+        <p className="mt-2 text-sm leading-6 text-[#718078]">
           {isSignup
-            ? "Start chatting in less than a minute."
-            : "Enter your details to continue."}
+            ? "Set up your workspace and bring your team into the flow."
+            : "Sign in to pick up where your team left off."}
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-        {/* Name */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         {isSignup && (
           <div className="space-y-2">
-            <Label htmlFor="name">Full name</Label>
-
-            <Input
-              id="name"
-              type="text"
-              placeholder="John Doe"
-              autoComplete="name"
-              className="h-11"
-              {...register("name")}
-            />
+            <Label htmlFor="name" className="text-[13px] font-semibold text-[#405348]">Full name</Label>
+            <div className="relative">
+              <UserRound aria-hidden="true" size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#93a097]" />
+              <Input
+                id="name"
+                type="text"
+                placeholder="Your name"
+                autoComplete="name"
+                aria-invalid={Boolean(errors.name)}
+                className="h-12 rounded-lg border-[#dfe5dc] bg-white pl-10 pr-3.5 text-sm text-[#20372d] placeholder:text-[#a0aca3] focus-visible:border-[#72936b] focus-visible:ring-[#72936b]/20"
+                {...register("name", { required: "Your name is required" })}
+              />
+            </div>
+            {errors.name && <p className="text-xs font-medium text-rose-700">{errors.name.message}</p>}
           </div>
         )}
 
-        {/* Email */}
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-
-          <Input
-            id="email"
-            type="email"
-            placeholder="you@company.com"
-            autoComplete="email"
-            className="h-11"
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Please enter a valid email",
-              },
-            })}
-          />
-
+          <Label htmlFor="email" className="text-[13px] font-semibold text-[#405348]">Work email</Label>
+          <div className="relative">
+            <Mail aria-hidden="true" size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#93a097]" />
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@company.com"
+              autoComplete="email"
+              aria-invalid={Boolean(errors.email)}
+              className="h-12 rounded-lg border-[#dfe5dc] bg-white pl-10 pr-3.5 text-sm text-[#20372d] placeholder:text-[#a0aca3] focus-visible:border-[#72936b] focus-visible:ring-[#72936b]/20"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Please enter a valid email",
+                },
+              })}
+            />
+          </div>
           {errors?.email && (
-            <span className="text-rose-500 text-sm font-semibold">
-              {errors?.email?.message || 'Email is required'}
-            </span>
+            <p className="text-xs font-medium text-rose-700">{errors.email.message}</p>
           )}
         </div>
 
-        {/* Password */}
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-
+          <Label htmlFor="password" className="text-[13px] font-semibold text-[#405348]">Password</Label>
           <div className="relative">
+            <LockKeyhole aria-hidden="true" size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#93a097]" />
             <Input
               id="password"
-              placeholder="*******"
+              placeholder={isSignup ? "Create a password" : "Enter your password"}
               type={showPassword ? "text" : "password"}
               autoComplete={isSignup ? "new-password" : "current-password"}
-              className="h-11 pr-11"
-              {...register("password", { required: true })}
+              aria-invalid={Boolean(errors.password)}
+              className="h-12 rounded-lg border-[#dfe5dc] bg-white pl-10 pr-11 text-sm text-[#20372d] placeholder:text-[#a0aca3] focus-visible:border-[#72936b] focus-visible:ring-[#72936b]/20"
+              {...register("password", { required: "Password is required" })}
             />
-
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-2 text-[#839188] transition-colors hover:text-[#1e4d42]"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
-
           {errors.password && (
-            <span className="text-rose-500 text-sm font-semibold">
-              Password is required
-            </span>
+            <p className="text-xs font-medium text-rose-700">{errors.password.message}</p>
           )}
         </div>
 
-        {/* Forgot password */}
-        {!isSignup && (
-          <div className="flex justify-end">
-            <button
-              type="button"
-              className="text-sm font-medium text-accent hover:underline hover:text-accent-strong"
-            >
-              Forgot password?
-            </button>
-          </div>
-        )}
-
-        {/* Submit */}
-        <Button
-          type="submit"
-          className="h-11 w-full bg-accent text-accent-foreground hover:bg-accent-strong"
-        >
-          {isSignup ? "Create account" : "Sign in"}
-        </Button>
-      </form>
-
-      {/* Switch Auth */}
-      <div className="mt-6 text-center text-sm text-muted-foreground">
-        {isSignup ? "Already have an account?" : "New here?"}
-
         <button
           type="submit"
-          onClick={() => setIsSignup(!isSignup)}
-          className="ml-1 font-semibold text-accent hover:underline hover:text-accent-strong"
+          className="group mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#1e4d42] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#143c32] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5f8265]"
+        >
+          {isSignup ? "Create your account" : "Sign in to FlowDesk"}
+          <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+        </button>
+      </form>
+
+      <div className="mt-7 border-t border-[#e8ece6] pt-5 text-center text-sm text-[#718078]">
+        {isSignup ? "Already have an account?" : "New to FlowDesk?"}{" "}
+        <Link
+          href={isSignup ? "/login" : "/signup"}
+          className="font-semibold text-[#315d45] underline-offset-4 hover:underline"
         >
           {isSignup ? "Sign in" : "Create an account"}
-        </button>
+        </Link>
       </div>
     </div>
   );
