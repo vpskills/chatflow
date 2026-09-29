@@ -37,7 +37,7 @@ const AuthPageShell = ({ mode }: AuthPageShellProps) => {
           }}
         >
           <div className="relative">
-            <div className="mb-10 inline-flex items-center gap-2 rounded-full border border-brand-panel-foreground/15 bg-brand-panel-foreground/5 px-3 py-1.5 text-[11px] font-medium text-brand-subtle">
+            <div className="mb-10 inline-flex items-center gap-2 rounded-full border border-brand-panel-foreground/15 bg-brand-panel-foreground/5 px-3 py-1.5 text-[11px] font-medium text-brand-panel-copy">
               <span className="size-1.5 rounded-full bg-brand-signal" />
               YOUR TEAM, IN A BETTER RHYTHM
             </div>
