@@ -1,65 +1,57 @@
 "use client";
+
 import Link from "next/link";
+import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail, UserRound } from "lucide-react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { authClient } from "@/lib/auth-client";
 
-interface AuthType {
-  name?: string;
+type LoginFormValues = {
   email: string;
   password: string;
-}
+};
 
-const Authform = ({ initialMode = "signin" }: { initialMode?: "signin" | "signup" }) => {
-  const isSignup = initialMode === "signup";
+const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthType>();
+  } = useForm<LoginFormValues>();
 
-  const onSubmit: SubmitHandler<AuthType> = () => {};
+  const onSubmit = async (formData: LoginFormValues) => {
+    const { error } = await authClient.signIn.email(
+      {
+        email: formData.email,
+        password: formData.password,
+      },
+      {
+        onError: (ctx) => {
+          console.error(ctx.error.message);
+        },
+      }
+    );
+
+    if (error) {
+      console.error(error.message);
+    }
+  };
 
   return (
     <div className="w-full">
       <div className="mb-8">
-        <p className="mb-3 text-xs font-semibold uppercase text-brand-muted">
-          {isSignup ? "START BUILDING TOGETHER" : "YOUR WORKSPACE IS READY"}
-        </p>
-        <h2 className="text-3xl font-semibold tracking-tight text-ink-strong">
-          {isSignup ? "Create your account" : "Welcome back"}
-        </h2>
+        <p className="mb-3 text-xs font-semibold uppercase text-brand-muted">YOUR WORKSPACE IS READY</p>
+        <h2 className="text-3xl font-semibold tracking-tight text-ink-strong">Welcome back</h2>
 
         <p className="mt-2 text-sm leading-6 text-copy">
-          {isSignup
-            ? "Set up your workspace and bring your team into the flow."
-            : "Sign in to pick up where your team left off."}
+          Sign in to pick up where your team left off.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-        {isSignup && (
-          <div className="space-y-2">
-            <Label htmlFor="name" className="text-[13px] font-semibold text-copy-strong">Full name</Label>
-            <div className="relative">
-              <UserRound aria-hidden="true" size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-icon-muted" />
-              <Input
-                id="name"
-                type="text"
-                placeholder="Your name"
-                autoComplete="name"
-                aria-invalid={Boolean(errors.name)}
-                className="h-12 rounded-lg border-field-border bg-field pl-10 pr-3.5 text-sm text-ink placeholder:text-field-placeholder focus-visible:border-brand-focus focus-visible:ring-brand-focus/20"
-                {...register("name", { required: "Your name is required" })}
-              />
-            </div>
-            {errors.name && <p className="text-xs font-medium text-destructive">{errors.name.message}</p>}
-          </div>
-        )}
-
         <div className="space-y-2">
           <Label htmlFor="email" className="text-[13px] font-semibold text-copy-strong">Work email</Label>
           <div className="relative">
@@ -80,7 +72,7 @@ const Authform = ({ initialMode = "signin" }: { initialMode?: "signin" | "signup
               })}
             />
           </div>
-          {errors?.email && (
+          {errors.email && (
             <p className="text-xs font-medium text-destructive">{errors.email.message}</p>
           )}
         </div>
@@ -91,16 +83,16 @@ const Authform = ({ initialMode = "signin" }: { initialMode?: "signin" | "signup
             <LockKeyhole aria-hidden="true" size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-icon-muted" />
             <Input
               id="password"
-              placeholder={isSignup ? "Create a password" : "Enter your password"}
+              placeholder="Enter your password"
               type={showPassword ? "text" : "password"}
-              autoComplete={isSignup ? "new-password" : "current-password"}
+              autoComplete="current-password"
               aria-invalid={Boolean(errors.password)}
               className="h-12 rounded-lg border-field-border bg-field pl-10 pr-11 text-sm text-ink placeholder:text-field-placeholder focus-visible:border-brand-focus focus-visible:ring-brand-focus/20"
               {...register("password", { required: "Password is required" })}
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => setShowPassword((current) => !current)}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-2 text-icon-hover transition-colors hover:text-brand"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
@@ -116,22 +108,22 @@ const Authform = ({ initialMode = "signin" }: { initialMode?: "signin" | "signup
           type="submit"
           className="group mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 text-sm font-semibold text-brand-on transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-focus"
         >
-          {isSignup ? "Create your account" : "Sign in to FlowDesk"}
+          Sign in to FlowDesk
           <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
         </button>
       </form>
 
       <div className="mt-7 border-t border-line-soft pt-5 text-center text-sm text-copy">
-        {isSignup ? "Already have an account?" : "New to FlowDesk?"}{" "}
+        New to FlowDesk?{" "}
         <Link
-          href={isSignup ? "/login" : "/signup"}
+          href="/signup"
           className="font-semibold text-brand-link underline-offset-4 hover:underline"
         >
-          {isSignup ? "Sign in" : "Create an account"}
+          Create an account
         </Link>
       </div>
     </div>
   );
 };
 
-export default Authform;
+export default LoginForm;

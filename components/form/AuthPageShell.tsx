@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, Check, CircleDashed, Clock3, LayoutDashboard } from "lucide-react";
-import Authform from "./Authform";
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
 import Logo from "../Logo";
 import ThemeToggle from "../ThemeToggle";
 
@@ -93,7 +94,7 @@ const AuthPageShell = ({ mode }: AuthPageShellProps) => {
             </span>
             <span className="text-sm font-semibold text-ink-strong">Your workspace, in sync.</span>
           </div>
-          <Authform initialMode={mode} />
+          {mode === "signup" ? <SignupForm /> : <LoginForm />}
           <p className="mt-8 text-center text-xs leading-5 text-copy-muted">
             By continuing, you agree to FlowDesk&apos;s terms and privacy policy.
           </p>
