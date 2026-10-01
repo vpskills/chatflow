@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, LoaderCircle, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 type LoginFormValues = {
   email: string;
@@ -16,23 +17,34 @@ type LoginFormValues = {
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [signInLoading, setSignInLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>();
+  const router = useRouter();
 
   const onSubmit = async (formData: LoginFormValues) => {
     const { error } = await authClient.signIn.email(
       {
         email: formData.email,
         password: formData.password,
+        callbackURL: "/",
       },
       {
+        onRequest: () => {
+          setSignInLoading(true);
+        }, 
         onError: (ctx) => {
           console.error(ctx.error.message);
+          setSignInLoading(false);
         },
-      }
+        onSuccess: () => {
+          router.push("/");
+          setSignInLoading(false);
+        },
+      },
     );
 
     if (error) {
@@ -106,10 +118,15 @@ const LoginForm = () => {
 
         <button
           type="submit"
+          disabled={signInLoading}
           className="group mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 text-sm font-semibold text-brand-on transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-focus"
         >
           Sign in to FlowDesk
-          <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+          {signInLoading ? (
+            <LoaderCircle size={16} className="transition-transform animate-spin group-hover:translate-x-0.5" />
+          ) : (
+            <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+          )}
         </button>
       </form>
 
