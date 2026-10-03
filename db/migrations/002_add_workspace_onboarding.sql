@@ -1,0 +1,5 @@
+ALTER TABLE workspaces
+ADD COLUMN IF NOT EXISTS region TEXT NOT NULL DEFAULT 'ap-southeast-1';
+
+ALTER TABLE workspaces
+ADD COLUMN IF NOT EXISTS onboarding_completed BOOLEAN NOT NULL DEFAULT FALSE;

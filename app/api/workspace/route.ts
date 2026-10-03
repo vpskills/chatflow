@@ -1,4 +1,8 @@
-import { createWorkspace, findWorkspaceByOwnerId, findWorkspaceBySlug } from "@/features/workspace/workspace.repository";
+import {
+  createWorkspace,
+  findWorkspaceByOwnerId,
+  findWorkspaceBySlug,
+} from "@/features/workspace/workspace.repository";
 import { getCurrentUser } from "@/lib/auth-session";
 import { NextResponse } from "next/server";
 
@@ -34,10 +38,10 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    console.log(request, body, "asdfasfd");
 
     const name = body.name?.trim();
     const slug = body.slug?.trim().toLowerCase();
+    const region = body.region?.trim() || "ap-southeast-1";
 
     if (!name) {
       return NextResponse.json(
@@ -62,7 +66,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const workspace = await createWorkspace(name, slug, user.id);
+    const workspace = await createWorkspace(name, slug, user.id, region);
 
     return NextResponse.json(
       {

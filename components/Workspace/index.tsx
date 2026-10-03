@@ -116,12 +116,12 @@ const Workspace = () => {
     <div className="flex min-h-screen items-center justify-center bg-page px-4 text-ink">
       <div className="w-full max-w-xl rounded-2xl border border-line-soft bg-surface p-8 shadow-lg">
         <div className="mb-8">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-brand-muted">
+          <h1 className="text-lg mb-3 font-semibold uppercase tracking-[0.14em] text-brand-muted">
             CREATE YOUR WORKSPACE
-          </p>
-          <h1 className="text-3xl font-semibold tracking-tight text-ink">
-            Set up your team
           </h1>
+          {/* <h1 className="text-3xl font-semibold tracking-tight text-ink">
+            Set up your team
+          </h1> */}
           <p className="mt-2 text-sm text-copy-muted">
             Create a workspace with a memorable name, a unique URL, and your
             region.

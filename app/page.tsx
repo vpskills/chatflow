@@ -27,5 +27,9 @@ export default async function HomePage() {
     return <Workspace />;
   }
 
+  if (!workspace?.onboarding_completed) {
+    redirect(`/${workspace.slug}/onboarding`);
+  }
+
   redirect(`/${workspace.slug}`);
 }
