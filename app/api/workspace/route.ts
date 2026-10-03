@@ -1,4 +1,4 @@
-import { findWorkspaceByOwnerId } from "@/features/workspace/workspace.repository";
+import { createWorkspace, findWorkspaceByOwnerId, findWorkspaceBySlug } from "@/features/workspace/workspace.repository";
 import { getCurrentUser } from "@/lib/auth-session";
 import { NextResponse } from "next/server";
 
@@ -25,3 +25,58 @@ export async function GET() {
   }
 }
 
+export async function POST(request: Request) {
+  try {
+    const user = await getCurrentUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    console.log(request, body, "asdfasfd");
+
+    const name = body.name?.trim();
+    const slug = body.slug?.trim().toLowerCase();
+
+    if (!name) {
+      return NextResponse.json(
+        { error: "Workspace name is required" },
+        { status: 400 },
+      );
+    }
+
+    if (!slug) {
+      return NextResponse.json(
+        { error: "Workspace slug is required" },
+        { status: 400 },
+      );
+    }
+
+    const existingWorkspace = await findWorkspaceBySlug(slug);
+
+    if (existingWorkspace) {
+      return NextResponse.json(
+        { error: "Workspace slug is already taken" },
+        { status: 409 },
+      );
+    }
+
+    const workspace = await createWorkspace(name, slug, user.id);
+
+    return NextResponse.json(
+      {
+        success: true,
+        workspace,
+      },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error("Create workspace error:", error);
+
+    return NextResponse.json(
+      { error: "Failed to create workspace" },
+      { status: 500 },
+    );
+  }
+}

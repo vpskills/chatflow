@@ -1,11 +1,12 @@
 "use client";
 
 import { ArrowRight, MapPin } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 
 type WorkspaceFormValues = {
   name: string;
@@ -24,9 +25,12 @@ const normalizeSlug = (value: string) =>
     .slice(0, 63);
 
 const Workspace = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<WorkspaceFormValues>({
     defaultValues: {
@@ -37,18 +41,76 @@ const Workspace = () => {
   });
 
   const [urlDraft, setUrlDraft] = useState("");
-  const currentUrl = normalizeSlug(urlDraft);
-  const workspaceUrl = currentUrl
-    ? `https://${appDomain}${currentUrl}`
+  const [slugAvailability, setSlugAvailability] = useState<
+    "idle" | "available" | "taken" | "checking"
+  >("idle");
+  const slug = normalizeSlug(urlDraft);
+  const workspaceUrl = slug
+    ? `https://${appDomain}${slug}`
     : `https://${appDomain}`;
 
-  const onSubmit = (formData: WorkspaceFormValues) => {
-    const normalizedSlug = normalizeSlug(formData.url);
-    console.log({
-      ...formData,
-      slug: normalizedSlug,
-    });
+  const checkUniqueSlug = async (slug: string) => {
+    setSlugAvailability("checking");
+
+    const res = await fetch(`api/workspace/${slug}`);
+    if (!res.ok) {
+      setSlugAvailability("taken");
+      setError("url", {
+        type: "server",
+        message: "Could not validate workspace URL",
+      });
+      return;
+    }
+    const data = await res.json();
+    if (!data?.unique) {
+      setSlugAvailability("taken");
+      setError("url", {
+        type: "manual",
+        message: "This workspace URL is already taken",
+      });
+      return;
+    }
+
+    setSlugAvailability("available");
+    clearErrors("url");
   };
+
+  const onSubmit = async (formData: WorkspaceFormValues) => {
+    const slug = normalizeSlug(formData.url);
+
+    const res = await fetch("/api/workspace", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        slug,
+        region: formData.region,
+      }),
+    });
+
+    const data = await res.json();
+
+    if(data?.success){
+      router?.push(`/${slug}/onboarding`)
+    }
+    console.log(data);
+  };
+
+  useEffect(() => {
+    if (!slug) {
+      setSlugAvailability("idle");
+      clearErrors("url");
+      return;
+    }
+    
+    const timer = setTimeout(() => {
+      void checkUniqueSlug(slug);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [slug, clearErrors]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-page px-4 text-ink">
@@ -129,6 +191,17 @@ const Workspace = () => {
               Your workspace will be available at
               <span className="ml-1 font-medium text-ink">{workspaceUrl}</span>
             </p>
+            {slugAvailability === "available" ? (
+              <p className="text-xs font-medium text-green-600">
+                This slug is available
+              </p>
+            ) : (
+              slugAvailability === "checking" && (
+                <p className="text-xs font-medium text-green-600">
+                  Checking availablity...
+                </p>
+              )
+            )}
             {errors.url && (
               <p className="text-xs font-medium text-destructive">
                 {errors.url.message}
