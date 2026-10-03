@@ -1,22 +1,24 @@
+'use client'
+
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import ThemeToggle from "../ThemeToggle";
 import Logo from "../Logo";
-// import { authClient } from "@/lib/auth-client";
-// import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
-const Header = () => {
-  // const router = useRouter();
-  
-  // const logout = async() => {
-  //   await authClient.signOut({
-  //     fetchOptions: {
-  //       onSuccess: () => {
-  //         router.push("/login");
-  //       },
-  //     },
-  //   });
-  // }
+const AuthHeader = () => {
+  const router = useRouter();
+
+  const logout = async() => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/login");
+        },
+      },
+    });
+  }
 
   return (
     <header className="border-b border-line-soft bg-page">
@@ -36,7 +38,7 @@ const Header = () => {
         <div className="flex items-center gap-3 sm:gap-6">
           <ThemeToggle />
 
-          <Link
+          {/* <Link
             href="/login"
             className="px-2 py-2 text-sm font-semibold text-copy-strong transition-colors hover:text-brand"
           >
@@ -49,18 +51,18 @@ const Header = () => {
           >
             Sign up
             <ArrowUpRight aria-hidden="true" size={16} />
-          </Link>
-           
-          {/* <button 
+          </Link> */}
+
+          <button 
             className="px-2 py-2 text-sm font-semibold text-copy-strong transition-colors hover:text-brand"
             onClick={() => logout()}
             >
             Logout
-          </button> */}
+          </button>
         </div>
       </nav>
     </header>
   );
 };
 
-export default Header;
+export default AuthHeader;

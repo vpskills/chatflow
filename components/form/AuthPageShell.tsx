@@ -14,16 +14,22 @@ const AuthPageShell = ({ mode }: AuthPageShellProps) => {
     <main className="min-h-screen bg-page text-ink">
       <header className="mx-auto flex h-19 max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link href="/" aria-label="FlowDesk home" className="text-ink">
-          <Logo variant="full" size={34} markColor="var(--brand)" accentColor="var(--brand-signal)" />
+          <Logo
+            variant="full"
+            size={34}
+            markColor="var(--brand)"
+            accentColor="var(--brand-signal)"
+          />
         </Link>
         <div className="flex items-center gap-3 sm:gap-5">
           <ThemeToggle />
           <Link
-            href="/"
+            href={mode === "signin" ? "/signup" : "/login"}
             className="inline-flex items-center gap-2 text-sm font-medium text-copy-muted transition-colors hover:text-brand"
           >
-            <ArrowLeft size={15} />
-            <span className="hidden sm:inline">Back to home</span>
+            <span className="hidden sm:inline">
+              {mode === "signin" ? "Sign up" : "Login"}
+            </span>
           </Link>
         </div>
       </header>
@@ -44,44 +50,81 @@ const AuthPageShell = ({ mode }: AuthPageShellProps) => {
             </div>
             <h1 className="max-w-lg text-4xl font-semibold leading-[1.08] sm:text-5xl">
               {mode === "signup" ? (
-                <>Make space for the work that <span className="font-medium italic text-brand-highlight">matters.</span></>
+                <>
+                  Make space for the work that{" "}
+                  <span className="font-medium italic text-brand-highlight">
+                    matters.
+                  </span>
+                </>
               ) : (
-                <>Pick up right where your team <span className="font-medium italic text-brand-highlight">left off.</span></>
+                <>
+                  Pick up right where your team{" "}
+                  <span className="font-medium italic text-brand-highlight">
+                    left off.
+                  </span>
+                </>
               )}
             </h1>
             <p className="mt-5 max-w-md text-[15px] leading-7 text-brand-panel-copy">
-              Plans, projects, and people stay connected, so good ideas have a clear path to done.
+              Plans, projects, and people stay connected, so good ideas have a
+              clear path to done.
             </p>
           </div>
 
           <div className="relative">
             <div className="mb-3 flex items-center justify-between text-xs text-brand-panel-copy">
-              <span className="inline-flex items-center gap-2 font-medium text-brand-panel-foreground"><LayoutDashboard size={14} /> This week</span>
+              <span className="inline-flex items-center gap-2 font-medium text-brand-panel-foreground">
+                <LayoutDashboard size={14} /> This week
+              </span>
               <span>Product launch</span>
             </div>
             <div className="space-y-1">
-                <div className="flex items-center gap-3 border-t border-brand-panel-foreground/15 py-4">
-                <span className="flex size-5 items-center justify-center rounded-full bg-brand-signal text-brand-panel"><Check size={12} /></span>
-                <span className="flex-1 text-sm text-brand-panel-copy">Align on launch milestones</span>
+              <div className="flex items-center gap-3 border-t border-brand-panel-foreground/15 py-4">
+                <span className="flex size-5 items-center justify-center rounded-full bg-brand-signal text-brand-panel">
+                  <Check size={12} />
+                </span>
+                <span className="flex-1 text-sm text-brand-panel-copy">
+                  Align on launch milestones
+                </span>
                 <span className="text-[11px] text-brand-panel-soft">Done</span>
               </div>
               <div className="flex items-center gap-3 border-t border-brand-panel-foreground/15 py-4">
-                <span className="flex size-5 items-center justify-center rounded-full border border-brand-panel-foreground/35 text-transparent"><Check size={12} /></span>
-                <span className="flex-1 text-sm text-brand-panel-foreground">Review the final experience</span>
-                <span className="inline-flex items-center gap-1.5 text-[11px] text-brand-highlight"><Clock3 size={12} /> Today</span>
+                <span className="flex size-5 items-center justify-center rounded-full border border-brand-panel-foreground/35 text-transparent">
+                  <Check size={12} />
+                </span>
+                <span className="flex-1 text-sm text-brand-panel-foreground">
+                  Review the final experience
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-[11px] text-brand-highlight">
+                  <Clock3 size={12} /> Today
+                </span>
               </div>
               <div className="flex items-center gap-3 border-y border-brand-panel-foreground/15 py-4">
-                <span className="flex size-5 items-center justify-center rounded-full border border-brand-panel-foreground/35 text-transparent"><Check size={12} /></span>
-                <span className="flex-1 text-sm text-brand-panel-copy">Share the release notes</span>
-                <span className="inline-flex items-center gap-1.5 text-[11px] text-brand-panel-soft"><CircleDashed size={12} /> Thu</span>
+                <span className="flex size-5 items-center justify-center rounded-full border border-brand-panel-foreground/35 text-transparent">
+                  <Check size={12} />
+                </span>
+                <span className="flex-1 text-sm text-brand-panel-copy">
+                  Share the release notes
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-[11px] text-brand-panel-soft">
+                  <CircleDashed size={12} /> Thu
+                </span>
               </div>
             </div>
             <div className="mt-7 flex items-center justify-between">
-              <p className="text-xs text-brand-panel-soft">One clear view. A team moving together.</p>
+              <p className="text-xs text-brand-panel-soft">
+                One clear view. A team moving together.
+              </p>
               <div className="flex -space-x-2" aria-label="Three teammates">
-                <span className="flex size-8 items-center justify-center rounded-full border-2 border-brand-panel bg-tone-sage text-[9px] font-bold text-tone-sage-ink">MC</span>
-                <span className="flex size-8 items-center justify-center rounded-full border-2 border-brand-panel bg-tone-peach text-[9px] font-bold text-tone-peach-ink">JL</span>
-                <span className="flex size-8 items-center justify-center rounded-full border-2 border-brand-panel bg-tone-lavender text-[9px] font-bold text-tone-lavender-ink">AK</span>
+                <span className="flex size-8 items-center justify-center rounded-full border-2 border-brand-panel bg-tone-sage text-[9px] font-bold text-tone-sage-ink">
+                  MC
+                </span>
+                <span className="flex size-8 items-center justify-center rounded-full border-2 border-brand-panel bg-tone-peach text-[9px] font-bold text-tone-peach-ink">
+                  JL
+                </span>
+                <span className="flex size-8 items-center justify-center rounded-full border-2 border-brand-panel bg-tone-lavender text-[9px] font-bold text-tone-lavender-ink">
+                  AK
+                </span>
               </div>
             </div>
           </div>
@@ -92,11 +135,14 @@ const AuthPageShell = ({ mode }: AuthPageShellProps) => {
             <span className="flex size-9 items-center justify-center rounded-lg bg-brand text-brand-on">
               <LayoutDashboard size={18} />
             </span>
-            <span className="text-sm font-semibold text-ink-strong">Your workspace, in sync.</span>
+            <span className="text-sm font-semibold text-ink-strong">
+              Your workspace, in sync.
+            </span>
           </div>
           {mode === "signup" ? <SignupForm /> : <LoginForm />}
           <p className="mt-8 text-center text-xs leading-5 text-copy-muted">
-            By continuing, you agree to FlowDesk&apos;s terms and privacy policy.
+            By continuing, you agree to FlowDesk&apos;s terms and privacy
+            policy.
           </p>
         </section>
       </div>

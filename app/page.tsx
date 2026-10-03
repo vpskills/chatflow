@@ -1,22 +1,31 @@
-import Dashboard from "@/components/Dashboard";
+import { redirect } from "next/navigation";
+
 import Header from "@/components/Header";
 import LandingPage from "@/components/Landing";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import Workspace from "@/components/Workspace";
 
-export default async function Home() {
-  const session = await auth.api.getSession({
-      headers: await headers()
-  })
+import { getCurrentUser } from "@/lib/auth-session";
+import { findWorkspaceByOwnerId } from "@/features/workspace/workspace.repository";
 
-  const isLoggedIn = session?.user?.id ? true : false;
+export default async function HomePage() {
+  const user = await getCurrentUser();
 
-  return (
-    <div className="min-h-screen bg-page text-ink">
-      <Header isLoggedIn={isLoggedIn} />
-      <main> 
-        {!isLoggedIn ? <LandingPage /> : <Dashboard />}
-      </main>
-    </div>
-  );
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-page text-ink">
+        <Header />
+        <main>
+          <LandingPage />
+        </main>
+      </div>
+    );
+  }
+
+  const workspace = await findWorkspaceByOwnerId(user?.id);
+
+  if (!workspace) {
+    return <Workspace />;
+  }
+
+  redirect(`/${workspace.slug}`);
 }
