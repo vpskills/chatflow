@@ -1,5 +1,7 @@
-const onboarding = () => {
-  return <div>onboarding</div>;
+import OnboardingForm from "@/components/onboarding";
+
+const Onboarding = () => {
+  return <OnboardingForm />;
 };
 
-export default onboarding;
+export default Onboarding;
