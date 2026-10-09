@@ -47,21 +47,47 @@ export default function OnboardingForm() {
   };
 
   //set error, or move forwards if no error.
-  const checkAndGoNext = () => {
-    if (step === 0 && !form.getValues("name").trim()) {
-      form.setError("name", {
-        type: "required",
-        message: "Add your name to continue.",
-      });
-      return;
-    }
+  const checkAndGoNext = async () => {
+    if (step === 0 && !(await form.trigger("name"))) return;
     form.clearErrors("name");
     setStep((current) => Math.min(current + 1, onboardingSteps.length - 1));
   };
 
+  const saveOnboarding = async (values: OnboardingValues) => {
+    form.clearErrors("root.server");
+
+    try {
+      const response = await fetch("/api/workspace/onboarding", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const result = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        form.setError("root.server", {
+          type: "server",
+          message: result.error ?? "Failed to save onboarding details.",
+        });
+        return;
+      }
+
+      setFinished(true);
+    } catch {
+      form.setError("root.server", {
+        type: "server",
+        message: "Could not reach the server. Try again.",
+      });
+    }
+  };
+
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(() => setFinished(true))}>
+      <form
+        onSubmit={form.handleSubmit(saveOnboarding, (errors) => {
+          if (errors.name) setStep(0);
+        })}
+      >
         <main className="relative flex min-h-screen overflow-hidden bg-onboarding-background text-onboarding-foreground">
           <OnboardingSidebar step={step} finished={finished} />
 
@@ -96,6 +122,14 @@ export default function OnboardingForm() {
                         <Step4 avatarUrl={avatarUrl} onEditStep={setStep} />
                       )}
                     </div>
+                    {form.formState.errors.root?.server?.message && (
+                      <p
+                        role="alert"
+                        className="mt-4 text-sm text-onboarding-error"
+                      >
+                        {form.formState.errors.root.server.message}
+                      </p>
+                    )}
                     <footer className="mt-10 flex items-center justify-between border-t border-onboarding-rule/8 pt-5">
                       <Button
                         type="button"
@@ -110,7 +144,7 @@ export default function OnboardingForm() {
                         Back
                       </Button>
                       <div className="flex items-center gap-4">
-                        {step < 3 && (
+                        {step > 0 && step < 3 && (
                           <Button
                             type="button"
                             variant="link"
@@ -141,9 +175,15 @@ export default function OnboardingForm() {
                           <Button
                             type="submit"
                             size="lg"
+                            disabled={form.formState.isSubmitting}
                             className="inline-flex h-11 items-center gap-2 rounded-lg bg-onboarding-accent-strong px-5 text-sm font-semibold text-onboarding-accent-foreground transition-colors hover:bg-onboarding-accent-hover"
                           >
-                            Finish setup <Check size={16} />
+                            {form.formState.isSubmitting
+                              ? "Saving..."
+                              : "Finish setup"}{" "}
+                            {!form.formState.isSubmitting && (
+                              <Check size={16} />
+                            )}
                           </Button>
                         )}
                       </div>

@@ -64,6 +64,7 @@ export default function ProfileStep({
               placeholder="Your name"
               className="h-12 rounded-lg border-onboarding-rule/11 bg-onboarding-field px-4 text-sm text-onboarding-foreground placeholder:text-onboarding-copy-faint focus-visible:border-onboarding-accent focus-visible:ring-onboarding-accent/20"
               {...register("name", {
+                required: "Add your name to continue.",
                 onChange: (event) => {
                   if (event.target.value.trim()) clearErrors("name");
                 },

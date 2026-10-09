@@ -1,0 +1,11 @@
+ALTER TABLE workspaces
+ADD COLUMN IF NOT EXISTS owner_title TEXT;
+
+ALTER TABLE workspaces
+ADD COLUMN IF NOT EXISTS owner_role TEXT;
+
+ALTER TABLE workspaces
+ADD COLUMN IF NOT EXISTS team_size TEXT;
+
+ALTER TABLE workspaces
+ADD COLUMN IF NOT EXISTS pending_invite_emails TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[];

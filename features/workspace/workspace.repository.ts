@@ -1,5 +1,12 @@
-import { db } from "@/lib/db"
+import { db } from "@/lib/db";
 import type { Workspace } from "./workspace.types";
+
+export type WorkspaceOnboardingDetails = {
+  ownerTitle: string | null;
+  ownerRole: string | null;
+  teamSize: string | null;
+  pendingInviteEmails: string[];
+};
 
 export async function createWorkspace(
   name: string,
@@ -54,4 +61,31 @@ export async function findWorkspaceBySlug(
   );
 
   return result.rows[0] ?? null;
+}
+
+export async function saveWorkspaceOnboarding(
+  ownerId: string,
+  details: WorkspaceOnboardingDetails,
+): Promise<boolean> {
+  const result = await db.query(
+    `
+      UPDATE workspaces
+      SET owner_title = $2,
+          owner_role = $3,
+          team_size = $4,
+          pending_invite_emails = $5,
+          onboarding_completed = TRUE,
+          updated_at = NOW()
+      WHERE owner_id = $1
+    `,
+    [
+      ownerId,
+      details.ownerTitle,
+      details.ownerRole,
+      details.teamSize,
+      details.pendingInviteEmails,
+    ],
+  );
+
+  return result.rowCount === 1;
 }
