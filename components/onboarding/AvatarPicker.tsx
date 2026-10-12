@@ -113,7 +113,7 @@ export default function AvatarPicker({
           </p>
         )}
 
-        <div className="mt-8 flex justify-between gap-2 border-t border-onboarding-rule/8 pt-4">
+        <div className="mt-5 flex justify-between gap-2 border-t border-onboarding-rule/8 pt-4">
           {avatarUrl ? (
             <Button
               type="button"

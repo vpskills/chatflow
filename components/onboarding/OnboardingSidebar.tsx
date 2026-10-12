@@ -12,7 +12,7 @@ export default function OnboardingSidebar({
   finished,
 }: OnboardingSidebarProps) {
   return (
-    <aside className="relative hidden w-71.5 shrink-0 flex-col border-r border-onboarding-rule/7 bg-onboarding-sidebar px-8 py-9 md:flex">
+    <aside className="relative hidden w-80 shrink-0 flex-col border-r border-onboarding-rule/7 bg-onboarding-sidebar px-8 py-9 md:flex">
       <Link
         href="/"
         className="mb-20 flex items-center gap-3"
@@ -30,9 +30,7 @@ export default function OnboardingSidebar({
           A good place to start
         </p>
         <h1 className="text-[25px] font-medium leading-[1.2] tracking-[-0.02em]">
-          Make this
-          <br />
-          space yours.
+          Make this space yours.
         </h1>
       </div>
       <nav aria-label="Setup progress" className="relative">

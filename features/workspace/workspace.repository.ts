@@ -63,6 +63,23 @@ export async function findWorkspaceBySlug(
   return result.rows[0] ?? null;
 }
 
+export async function findWorkspaceBySlugAndOwnerId(
+  slug: string,
+  ownerId: string,
+): Promise<Workspace | null> {
+  const result = await db.query<Workspace>(
+    `
+      SELECT * 
+      FROM workspaces
+      WHERE slug = $1 AND owner_id = $2
+      LIMIT 1
+    `,
+    [slug, ownerId],
+  );
+
+  return result.rows[0] ?? null;
+}
+
 export async function saveWorkspaceOnboarding(
   ownerId: string,
   details: WorkspaceOnboardingDetails,

@@ -42,8 +42,7 @@ export async function POST(request: Request) {
 
     const values = body as Record<string, unknown>;
     const name = typeof values.name === "string" ? values.name.trim() : "";
-    const ownerTitle =
-      typeof values.title === "string" ? values.title.trim() : "";
+    const ownerTitle = typeof values.title === "string" ? values.title.trim() : "";
     const ownerRole = typeof values.role === "string" ? values.role : "";
     const teamSize = typeof values.teamSize === "string" ? values.teamSize : "";
     const emails = typeof values.emails === "string" ? values.emails : "";
