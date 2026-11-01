@@ -41,13 +41,13 @@ const LandingPage = () => {
                 Get started for free
                 <ArrowUpRight aria-hidden="true" size={17} />
               </Link>
-              <a
+              {/* <a
                 href="#workspace"
                 className="inline-flex h-12 items-center gap-2 px-2 text-sm font-semibold text-copy-strong transition-colors hover:text-brand"
               >
                 Take a look
                 <ArrowDownRight aria-hidden="true" size={16} />
-              </a>
+              </a> */}
             </div>
             <div className="mt-10 flex items-center gap-3 text-sm text-copy-muted">
               <div className="flex -space-x-2" aria-hidden="true">

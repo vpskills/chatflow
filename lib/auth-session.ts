@@ -2,9 +2,14 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
 export async function getCurrentUser() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
 
-  return session?.user ?? null;
+    return session?.user ?? null;
+  } catch (error) {
+    console.log('Getting session failed!')
+    return null
+  }  
 }
