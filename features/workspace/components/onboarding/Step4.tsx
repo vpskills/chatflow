@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import type { OnboardingValues } from "./onboarding.types";
 
 type ReviewStepProps = {

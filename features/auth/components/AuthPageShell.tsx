@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowLeft, Check, CircleDashed, Clock3, LayoutDashboard } from "lucide-react";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
-import Logo from "../Logo";
-import ThemeToggle from "../ThemeToggle";
+import Logo from "@/components/Logo";
+import ThemeToggle from "@/components/ThemeToggle";
 
 type AuthPageShellProps = {
   mode: "signin" | "signup";

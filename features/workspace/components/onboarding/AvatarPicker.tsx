@@ -1,8 +1,8 @@
 import { useState, type ChangeEvent } from "react";
 import { ImagePlus, Upload, X } from "lucide-react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const maxAvatarSize = 5 * 1024 * 1024;
 

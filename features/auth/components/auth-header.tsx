@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import ThemeToggle from "../ThemeToggle";
-import Logo from "../Logo";
+import ThemeToggle from "@/components/ThemeToggle";
+import Logo from "@/components/Logo";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 

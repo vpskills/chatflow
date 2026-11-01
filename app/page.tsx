@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 
 import Header from "@/components/Header";
-import LandingPage from "@/components/Landing";
-import Workspace from "@/components/Workspace";
+import LandingPage from "@/features/landing/components/landing-page";
+import Workspace from "@/features/workspace/components/workspace-form";
 
 import { getCurrentUser } from "@/lib/auth-session";
 import { findWorkspaceByOwnerId } from "@/features/workspace/workspace.repository";

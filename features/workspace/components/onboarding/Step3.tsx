@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link2, Sparkles } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import type { OnboardingValues } from "./onboarding.types";
 
 export default function InviteStep() {

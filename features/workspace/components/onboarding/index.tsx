@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import AvatarPicker from "./AvatarPicker";
 
 import Step1 from "./Step1";
